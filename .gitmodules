@@ -1,0 +1,3 @@
+[submodule "Essentials"]
+	path = Essentials
+	url = https://github.com/bgonzales-vega/Essentials.git

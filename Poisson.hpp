@@ -1,4 +1,4 @@
-#include "Essentials/Essentials.hpp"
+ #include "Essentials/Essentials.hpp"
 #include "Essentials/Distances.hpp"
 
 #include <assert.h>
@@ -316,5 +316,32 @@ namespace poisson{
     		return samples;
         }
     };
-
+	
+	 	 
+	brahand::IndicesArray addMarginPoints(brahand::ImageSize size, float porcentajeSeparationWidth,float porcentajeSeparationHeight){
+		
+		brahand::ulsize separationWidth = (size.width*porcentajeSeparationWidth)-2;
+		brahand::ulsize separationHeight = (size.height*porcentajeSeparationHeight)-2;
+		if(separationWidth==-1){separationWidth=0;} 
+		if(separationHeight==-1){separationHeight=0;}  
+		brahand::ulsize num = (size.width * size.height) - (size.width); 
+		brahand::ulsize numPointWidth =  floor((size.width-1)/(separationWidth+1))+1;
+		brahand::ulsize numPointHeight =  floor((size.height-1)/(separationHeight+1))+1;
+		brahand::ulsize sizePointMargin =  (numPointWidth*2)+((numPointHeight-2)*2); 
+ 		brahand::IndicesArray array = brahand::IndicesArray(sizePointMargin);
+ 		brahand::ulsize position = 0;
+			 
+		for( brahand::ulsize i = 0 ; i < size.width - separationWidth-1; i=i+separationWidth+1){ 
+			array[position]=i; position++;
+			array[position]=i+num; position++; 
+		}
+		array[position]=size.width - 1; position++;
+		array[position]=size.width + num - 1; position++; 
+ 			 
+      	for( brahand::ulsize i = (separationHeight+1) ; i < size.height - separationHeight - 1; i=i+separationHeight+1){ 
+			array[position]=i*(size.width); position++;
+			array[position]=(i*(size.width))+size.width-1; position++; 
+		}  
+		return array;
+	}
 }
